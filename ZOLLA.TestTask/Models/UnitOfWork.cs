@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Mvc;
 
 namespace ZOLLA.TestTask.Models
 {
@@ -10,17 +11,17 @@ namespace ZOLLA.TestTask.Models
 
 
 
-        public ClientRepository Clients { get; private set; }
+        public IRepository<Client> Clients { get; private set; }
 
-        public OrderRepository Orders { get; private set; }
+        public IRepository<Order> Orders { get; private set; }
 
 
 
         public UnitOfWork()
         {
             context = new Context();
-            Clients = new ClientRepository(context);
-            Orders = new OrderRepository(context);
+            Clients = DependencyResolver.Current.GetService<IRepository<Client>>();
+            Orders = DependencyResolver.Current.GetService<IRepository<Order>>();
         }
 
 

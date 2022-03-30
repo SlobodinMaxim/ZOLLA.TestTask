@@ -2,25 +2,24 @@
     <div class="mt-2 mb-2 text-center">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th scope="col">Last Name</th>
-                <th scope="col">First Name</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
+                <tr>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">First Name</th>
+                    <th style="width:200px" scope="col"></th>
+                </tr>
             </thead>
             <tbody></tbody>
         </table>
 
         <nav><ul class="pagination text-center"></ul></nav>
     </div>
-    
+
     <div class="mb-2 text-center">
         <button class="btn btn-success" data-bs-target="#client" data-bs-toggle="modal" id="add-client">Add</button>
     </div>
 </div>
 
-<div aria-labelledby="title" aria-hidden="true" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="client" tabindex="-1">
+<div aria-labelledby="title" aria-hidden="true" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" data-client-id="" id="client" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -28,7 +27,6 @@
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
-
                 <div class="input-group mt-2 mb-2">
                     <span class="input-group-text" id="last-name">Last Name</span>
                     <input aria-describedby="last-name" aria-label="Last Name" class="form-control" placeholder="Last Name" type="text" />
@@ -39,14 +37,57 @@
                     <input aria-describedby="first-name" aria-label="First Name" class="form-control" placeholder="First Name" type="text" />
                 </div>
 
+                <div ng-app="ordersApp">
+                    <h5>Orders</h5>
+                    <div ng-controller="orderController">
+
+                        <div class="mt-2 mb-2 text-center">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Description</th>
+                                        <th style="width:200px" scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="order in orders">
+                                        <td>{{order.Quantity}}</td>
+                                        <td>{{order.Price}}</td>
+                                        <td>{{order.Description}}</td>
+                                        <td>
+                                            <button class="btn btn-primary me-2">Edit</button>
+                                            <button class="btn btn-danger">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <nav>
+                                <ul class="pagination text-center">
+                                    <li class="page-item"><a class="page-link" href="#" ng-click="setPage(pageInfo.Page - 1)">Previous</a></li>
+                                    <li class="page-item" ng-repeat="index in [] | range:pageInfo.TotalPages">
+                                        <a class="page-link bg-primary text-white" href="#" ng-if="pageInfo.Page == index + 1" ng-click="setPage(index + 1)">{{index + 1}}</a>
+                                        <a class="page-link" href="#" ng-if="pageInfo.Page != index + 1" ng-click="setPage(index + 1)">{{index + 1}}</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#" ng-click="setPage(pageInfo.Page + 1)">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div class="mb-2 text-center">
+                            <button class="btn btn-success" data-bs-target="#order" data-bs-toggle="modal" id="add-order">Add</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                @*<button type="button" class="btn" data-bs-dismiss="modal">Close</button>*@
                 <button class="btn btn-primary" type="button">Save</button>
             </div>
         </div>
     </div>
 </div>
 
-
-<script async src="~/Scripts/ZollaTestTask/home.index.js"></script>
+@Scripts.Render("~/Scripts/ZollaTestTask/clientController.js")
+@Scripts.Render("~/Scripts/ZollaTestTask/ordersApp.js")

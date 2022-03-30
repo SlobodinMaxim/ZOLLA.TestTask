@@ -2,24 +2,24 @@
     `use strict`
 
     $(document).ready(() => {
-        controller.initialize();
+        clientController.initialize();
     });
 
     const api = {
         addClient: function (client, onSuccess, onError, onComplete) {
-            return this.sendRequest(`post`, `/Home/AddClient`, client, onSuccess, onError, onComplete);
-        }, 
+            return this.sendRequest(`post`, `/Client/Add`, client, onSuccess, onError, onComplete);
+        },
 
         deleteClient: function (clientId, onSuccess, onError, onComplete) {
-            return this.sendRequest(`post`, `/Home/DeleteClient`, { clientId }, onSuccess, onError, onComplete);
+            return this.sendRequest(`post`, `/Client/Delete`, { clientId }, onSuccess, onError, onComplete);
         },
 
         editClient: function (client, onSuccess, onError, onComplete) {
-            return this.sendRequest(`post`, `/Home/EditClient`, client, onSuccess, onError, onComplete);
+            return this.sendRequest(`post`, `/Client/Edit`, client, onSuccess, onError, onComplete);
         },
 
         getClients: function (page, onSuccess, onError, onComplete) {
-            return this.sendRequest(`get`, `/Home/GetClients`, { page }, onSuccess, onError, onComplete);
+            return this.sendRequest(`get`, `/Client/Get`, { page }, onSuccess, onError, onComplete);
         },
 
         sendRequest: function (method, action, data, onSuccess, onError, onComplete) {
@@ -63,7 +63,7 @@
         }
     }
 
-    const controller = {
+    const clientController = {
         clients: null,
         pageInfo: null,
 
@@ -73,7 +73,8 @@
                 client = {},
                 jClient = $(`#client`);
 
-            jClient.find(`#title`).text(`Add client`);
+            jClient.data(`clientId`, 0);
+            $(`#title`).text(`Add client`);
 
             const
                 jLastName = jClient.find(`#last-name`).closest(`.input-group`).find(`input`)
@@ -105,8 +106,7 @@
                 jTable = $(`#clients`).find(`tbody`).html(``);
 
             for (const client of clients) {
-
-                const jEdit = $(`<button class="btn btn-primary" data-bs-target="#client" data-bs-toggle="modal">`)
+                const jEdit = $(`<button class="btn btn-primary me-2" data-bs-target="#client" data-bs-toggle="modal">`)
                     .click(() => this.editClient(client))
                     .text(`Edit`);
 
@@ -117,8 +117,7 @@
                 const jClient = $(`<tr>`)
                     .append(`<td>${client.LastName}</td>`)
                     .append(`<td>${client.FirstName}</td>`)
-                    .append($(`<td>`).append(jEdit))
-                    .append($(`<td>`).append(jDelete));
+                    .append($(`<td>`).append(jEdit).append(jDelete));
 
                 jTable.append(jClient);
             }
@@ -156,7 +155,8 @@
         editClient: function (client) {
             const jClient = $(`#client`);
 
-            jClient.find(`#title`).text(`Edit client #${client.Id}`);
+            jClient.data(`clientId`, client.Id);
+            $(`#title`).text(`Edit client #${client.Id}`);
 
             const
                 jLastName = jClient.find(`#last-name`).closest(`.input-group`).find(`input`)
